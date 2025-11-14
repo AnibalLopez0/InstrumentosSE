@@ -1,6 +1,9 @@
 # ----------------------------------------------
 # SISTEMA EXPERTO EN PYTHON – Instrumentos de Cuerda
 # ----------------------------------------------
+import requests
+from PIL import Image
+from io import BytesIO
 
 # Base de conocimiento: instrumentos y características
 instrumentos = {
@@ -55,6 +58,14 @@ def buscar_instrumento(caracteristicas):
     return posibles
 
 
+#obtener imagen
+def obtener_imagen(url):
+    try:
+        resp = requests.get(url)
+        resp.raise_for_status()
+        return Image.open(BytesIO(resp.content))
+    except:
+        return None
 # ----------------------------------------------
 # Proceso de preguntas con limpieza de texto
 # ----------------------------------------------
@@ -88,15 +99,15 @@ def inicio():
     posibles = buscar_instrumento(caracteristicas)
 
     if posibles is None:
-        print("\n❌ No se encontró ningún instrumento relacionado.\n")
+        print("\n No se encontró ningún instrumento relacionado.\n")
         return
 
-    print("\n🎸 INSTRUMENTOS RELACIONADOS (ordenados por coincidencias):\n")
+    print("\n INSTRUMENTOS RELACIONADOS (ordenados por coincidencias):\n")
 
     for nombre, score in posibles:
         print(f"- {nombre}  →  coincidencias: {score}")
 
-    print("\n👉 El primero es el más probable.\n")
+    print("\n El primero es el más probable.\n")
 
 
 # ----------------------------------------------
